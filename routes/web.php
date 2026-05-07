@@ -23,6 +23,14 @@ Route::get('/existing', function () {
     return view('home.existing-company');
 });
 
+// Test Error Pages
+Route::get('/errors/{code}', function ($code) {
+    if (in_array($code, ['401', '403', '404', '419', '429', '500', '503'])) {
+        abort($code);
+    }
+    abort(404);
+});
+
 // User Auth routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
