@@ -75,7 +75,7 @@
                             <th class="text-left py-3 px-4 text-gray-400 text-xs font-medium uppercase">Email</th>
                             <th class="text-left py-3 px-4 text-gray-400 text-xs font-medium uppercase hidden md:table-cell">Phone</th>
                             <th class="text-left py-3 px-4 text-gray-400 text-xs font-medium uppercase hidden lg:table-cell">Companies</th>
-                            <th class="text-left py-3 px-4 text-gray-400 text-xs font-medium uppercase hidden sm:table-cell">Joined</th>
+                            <th class="text-left py-3 px-4 text-gray-400 text-xs font-medium uppercase hidden sm:table-cell">Last Seen</th>
                             <th class="text-left py-3 px-4 text-gray-400 text-xs font-medium uppercase">Actions</th>
                         </tr></thead>
                         <tbody>
@@ -94,7 +94,17 @@
                                 <td class="py-3 px-4 hidden lg:table-cell">
                                     <span class="inline-block px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-400">{{ $user->companies_count }}</span>
                                 </td>
-                                <td class="py-3 px-4 text-gray-500 text-sm hidden sm:table-cell">{{ $user->created_at->format('M d, Y') }}</td>
+                                <td class="py-3 px-4 text-gray-500 text-sm hidden sm:table-cell">
+                                    @if($user->last_seen_at)
+                                        @if($user->last_seen_at->diffInMinutes(now()) < 5)
+                                            <span class="text-green-400">Online</span>
+                                        @else
+                                            {{ $user->last_seen_at->diffForHumans() }}
+                                        @endif
+                                    @else
+                                        Never
+                                    @endif
+                                </td>
                                 <td class="py-3 px-4">
                                     <div class="flex items-center space-x-2">
                                         <a href="{{ route('admin.users.view', $user->id) }}" class="text-blue-400 hover:text-blue-300 transition text-sm">View</a>

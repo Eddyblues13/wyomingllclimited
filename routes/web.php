@@ -37,8 +37,12 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/api/register-company', [AuthController::class, 'registerCompany']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::get('/verify', [AuthController::class, 'showVerify'])->name('verify');
+Route::post('/verify', [AuthController::class, 'verify']);
+Route::post('/resend-code', [AuthController::class, 'resendCode']);
+
 // User Protected routes
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified', 'update.last_seen'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 

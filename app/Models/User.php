@@ -22,6 +22,12 @@ class User extends Authenticatable
         'city',
         'country',
         'postal_code',
+        'verification_code',
+        'verification_code_expires_at',
+        'is_verified',
+        'last_login_at',
+        'last_login_ip',
+        'last_seen_at',
     ];
 
     protected $hidden = [
@@ -34,6 +40,10 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'verification_code_expires_at' => 'datetime',
+            'is_verified' => 'boolean',
+            'last_login_at' => 'datetime',
+            'last_seen_at' => 'datetime',
         ];
     }
 
@@ -50,5 +60,13 @@ class User extends Authenticatable
             $initials .= strtoupper(substr($part, 0, 1));
         }
         return substr($initials, 0, 2);
+    }
+
+    public function generateVerificationCode()
+    {
+        $this->verification_code = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
+        $this->verification_code_expires_at = now()->addMinutes(15);
+        $this->save();
+        return $this->verification_code;
     }
 }

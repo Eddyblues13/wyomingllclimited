@@ -52,7 +52,7 @@
                 </form>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="bg-gray-700/30 rounded-lg p-4">
                     <p class="text-gray-500 text-xs uppercase mb-1">Phone</p>
                     <p class="text-white text-sm">{{ $user->phone ?? 'Not provided' }}</p>
@@ -62,12 +62,43 @@
                     <p class="text-white text-sm">{{ $user->street_address ?? 'Not provided' }}{{ $user->unit_apartment ? ', '.$user->unit_apartment : '' }}</p>
                 </div>
                 <div class="bg-gray-700/30 rounded-lg p-4">
-                    <p class="text-gray-500 text-xs uppercase mb-1">City / Country</p>
-                    <p class="text-white text-sm">{{ $user->city ?? '-' }} / {{ $user->country ?? '-' }}</p>
-                </div>
-                <div class="bg-gray-700/30 rounded-lg p-4">
                     <p class="text-gray-500 text-xs uppercase mb-1">Registered</p>
                     <p class="text-white text-sm">{{ $user->created_at->format('M d, Y h:i A') }}</p>
+                </div>
+                <div class="bg-gray-700/30 rounded-lg p-4">
+                    <p class="text-gray-500 text-xs uppercase mb-1">Last Login</p>
+                    <p class="text-white text-sm">
+                        @if($user->last_login_at)
+                            {{ $user->last_login_at->format('M d, Y h:i A') }}<br>
+                            <span class="text-gray-400 text-xs">IP: {{ $user->last_login_ip }}</span>
+                        @else
+                            Never
+                        @endif
+                    </p>
+                </div>
+                <div class="bg-gray-700/30 rounded-lg p-4">
+                    <p class="text-gray-500 text-xs uppercase mb-1">Last Seen</p>
+                    <p class="text-white text-sm">
+                        @if($user->last_seen_at)
+                            @if($user->last_seen_at->diffInMinutes(now()) < 5)
+                                <span class="text-green-400">Online Now</span>
+                            @else
+                                {{ $user->last_seen_at->diffForHumans() }}
+                            @endif
+                        @else
+                            Never
+                        @endif
+                    </p>
+                </div>
+                <div class="bg-gray-700/30 rounded-lg p-4">
+                    <p class="text-gray-500 text-xs uppercase mb-1">Verification Status</p>
+                    <p class="text-white text-sm">
+                        @if($user->is_verified)
+                            <span class="text-green-400">Verified</span>
+                        @else
+                            <span class="text-yellow-400">Pending</span>
+                        @endif
+                    </p>
                 </div>
             </div>
         </div>
