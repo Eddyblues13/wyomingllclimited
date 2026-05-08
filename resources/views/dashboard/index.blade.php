@@ -9,16 +9,18 @@
         tailwind.config = { theme: { extend: { colors: { 'navy': '#1e3a8a', 'orange': '#f97316', 'purple-custom': '#6366f1' } } } }
     </script>
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <!-- Smartsupp Live Chat script -->
     <script type="text/javascript">
-var _smartsupp = _smartsupp || {};
-_smartsupp.key = '7fff036646f0b2976bbd9f7338d1a51144cb2068';
-window.smartsupp||(function(d) {
-  var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
-  s=d.getElementsByTagName('script')[0];c=d.createElement('script');
-  c.type='text/javascript';c.charset='utf-8';c.async=true;
-  c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
-})(document);
-</script>
+    var _smartsupp = _smartsupp || {};
+    _smartsupp.key = '862cd3915db29b95e7f660ce5e0bf234a887c935';
+    window.smartsupp||(function(d) {
+      var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+      s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+      c.type='text/javascript';c.charset='utf-8';c.async=true;
+      c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+    })(document);
+    </script>
+    <noscript>Powered by <a href="https://www.smartsupp.com" target="_blank">Smartsupp</a></noscript>
 </head>
 <body class="bg-gray-50 min-h-screen" x-data="{ showBanner: true, sidebarOpen: false, activeTab: 'overview' }">
     <!-- Top Header -->
