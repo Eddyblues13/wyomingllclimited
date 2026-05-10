@@ -158,7 +158,7 @@ class="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounde
 </div>
 </div>
 
-<button onclick="window.location.href='/start'" class="bg-gray-200 text-gray-700 px-6 py-2 rounded-full border hover:bg-gray-300 transition">Login</button>
+<button onclick="window.location.href='/login'" class="bg-gray-200 text-gray-700 px-6 py-2 rounded-full border hover:bg-gray-300 transition">Login</button>
 <button onclick="window.location.href='/start'" class="bg-navy text-white px-6 py-2 rounded-full hover:bg-blue-800 transition">Start Your Business</button>
 </div>
 
@@ -220,7 +220,7 @@ class="lg:hidden border-t border-gray-200">
 
 <!-- Mobile CTA Buttons -->
 <div class="pt-4 space-y-3">
-<button onclick="window.location.href='/start'" class="w-full bg-gray-200 text-gray-700 px-6 py-3 rounded-full border hover:bg-gray-300 transition">Login</button>
+<button onclick="window.location.href='/login'" class="w-full bg-gray-200 text-gray-700 px-6 py-3 rounded-full border hover:bg-gray-300 transition">Login</button>
 <button onclick="window.location.href='/start'" class="w-full bg-navy text-white px-6 py-3 rounded-full hover:bg-blue-800 transition">Start Your Business</button>
 </div>
 
