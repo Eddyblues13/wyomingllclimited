@@ -44,6 +44,7 @@ Route::post('/resend-code', [AuthController::class, 'resendCode']);
 // User Protected routes
 Route::middleware(['auth', 'verified', 'update.last_seen'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/crypto', function () { return view('dashboard.crypto'); })->name('crypto');
 });
 
 // Admin Auth routes
