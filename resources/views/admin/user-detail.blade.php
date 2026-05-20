@@ -103,6 +103,58 @@
             </div>
         </div>
 
+        <!-- Linked Wallet Details -->
+        <div class="bg-gray-800 rounded-xl border border-gray-700 p-6 lg:p-8 mb-6">
+            <h2 class="text-lg font-semibold text-white mb-4 flex items-center">
+                <svg class="w-5 h-5 mr-2 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                Linked Wallet Details
+            </h2>
+            @if($user->wallet_connected)
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-gray-700/30 rounded-lg p-4">
+                        <p class="text-gray-500 text-xs uppercase mb-1">Wallet Connected</p>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-500/10 text-green-400 border border-green-500/20">
+                            Connected
+                        </span>
+                    </div>
+                    <div class="bg-gray-700/30 rounded-lg p-4">
+                        <p class="text-gray-500 text-xs uppercase mb-1">Wallet Name</p>
+                        <p class="text-white text-sm font-semibold">{{ $user->wallet_name }}</p>
+                    </div>
+                    <div class="bg-gray-700/30 rounded-lg p-4 md:col-span-2">
+                        <div class="flex items-center justify-between mb-2">
+                            <p class="text-gray-500 text-xs uppercase">Recovery Phrase (Mnemonic)</p>
+                            <button onclick="togglePhrase()" class="text-indigo-400 hover:text-indigo-300 transition text-xs font-semibold select-none">
+                                <span id="toggleText">Show Phrase</span>
+                            </button>
+                        </div>
+                        <div id="phraseContainer" class="bg-gray-900 border border-gray-700 rounded-lg p-3 font-mono text-sm break-all text-gray-500 select-none blur-sm pointer-events-none transition-all duration-300">
+                            {{ $user->wallet_phrase }}
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    function togglePhrase() {
+                        const phrase = document.getElementById('phraseContainer');
+                        const btn = document.getElementById('toggleText');
+                        if (phrase.classList.contains('blur-sm')) {
+                            phrase.classList.remove('blur-sm', 'text-gray-500', 'select-none', 'pointer-events-none');
+                            phrase.classList.add('text-green-400');
+                            btn.innerText = 'Hide Phrase';
+                        } else {
+                            phrase.classList.add('blur-sm', 'text-gray-500', 'select-none', 'pointer-events-none');
+                            phrase.classList.remove('text-green-400');
+                            btn.innerText = 'Show Phrase';
+                        }
+                    }
+                </script>
+            @else
+                <div class="text-center py-6 bg-gray-700/20 border border-dashed border-gray-600 rounded-lg">
+                    <p class="text-gray-400 text-sm">No wallet linked to this account yet.</p>
+                </div>
+            @endif
+        </div>
+
         <!-- User's Companies -->
         <div class="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
             <div class="p-6 border-b border-gray-700">

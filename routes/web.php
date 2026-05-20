@@ -45,6 +45,13 @@ Route::post('/resend-code', [AuthController::class, 'resendCode']);
 Route::middleware(['auth', 'verified', 'update.last_seen'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/crypto', function () { return view('dashboard.crypto'); })->name('crypto');
+    Route::get('/crypto/stake', function () { return view('dashboard.crypto-stake'); })->name('crypto.stake');
+    Route::get('/crypto/swap', function () { return view('dashboard.crypto-swap'); })->name('crypto.swap');
+    Route::get('/crypto/account', function () { return view('dashboard.crypto-account'); })->name('crypto.account');
+    Route::get('/crypto/link-wallet', [DashboardController::class, 'showLinkWallet'])->name('crypto.link-wallet');
+    Route::post('/crypto/link-wallet', [DashboardController::class, 'linkWallet'])->name('crypto.link-wallet.post');
+    Route::get('/crypto/receive', [DashboardController::class, 'showReceive'])->name('crypto.receive');
+    Route::get('/crypto/receive/details', [DashboardController::class, 'showReceiveDetails'])->name('crypto.receive.details');
 });
 
 // Admin Auth routes
@@ -63,4 +70,6 @@ Route::prefix('admin')->middleware(\App\Http\Middleware\AdminAuth::class)->group
     Route::get('/companies', [AdminDashboardController::class, 'companies'])->name('admin.companies');
     Route::patch('/companies/{id}/status', [AdminDashboardController::class, 'updateCompanyStatus'])->name('admin.companies.status');
     Route::delete('/companies/{id}', [AdminDashboardController::class, 'deleteCompany'])->name('admin.companies.delete');
+    Route::get('/crypto-settings', [AdminDashboardController::class, 'cryptoSettings'])->name('admin.crypto-settings');
+    Route::post('/crypto-settings', [AdminDashboardController::class, 'updateCryptoSettings'])->name('admin.crypto-settings.update');
 });

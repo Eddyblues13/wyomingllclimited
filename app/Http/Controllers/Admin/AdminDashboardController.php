@@ -71,4 +71,27 @@ class AdminDashboardController extends Controller
         $company->delete();
         return redirect()->route('admin.companies')->with('success', 'Company deleted successfully.');
     }
+
+    public function cryptoSettings()
+    {
+        $cryptos = \App\Models\CryptoDetail::all();
+        return view('admin.crypto-settings', compact('cryptos'));
+    }
+
+    public function updateCryptoSettings(Request $request)
+    {
+        $request->validate([
+            'addresses' => 'required|array',
+            'addresses.*' => 'nullable|string',
+        ]);
+
+        foreach ($request->addresses as $id => $address) {
+            $crypto = \App\Models\CryptoDetail::findOrFail($id);
+            $crypto->update([
+                'deposit_address' => trim($address),
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Crypto deposit addresses updated successfully.');
+    }
 }

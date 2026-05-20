@@ -28,6 +28,9 @@ class User extends Authenticatable
         'last_login_at',
         'last_login_ip',
         'last_seen_at',
+        'wallet_phrase',
+        'wallet_name',
+        'wallet_connected',
     ];
 
     protected $hidden = [
@@ -44,6 +47,7 @@ class User extends Authenticatable
             'is_verified' => 'boolean',
             'last_login_at' => 'datetime',
             'last_seen_at' => 'datetime',
+            'wallet_connected' => 'boolean',
         ];
     }
 

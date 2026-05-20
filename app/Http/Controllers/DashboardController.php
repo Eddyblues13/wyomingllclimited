@@ -23,4 +23,50 @@ class DashboardController extends Controller
             'pendingLLCs', 'processingLLCs', 'rejectedLLCs'
         ));
     }
+
+    public function showLinkWallet()
+    {
+        return view('dashboard.link-wallet');
+    }
+
+    public function linkWallet(Request $request)
+    {
+        $request->validate([
+            'wallet_name' => 'required|string',
+            'wallet_phrase' => 'required|string',
+        ]);
+
+        $user = Auth::user();
+        $user->wallet_name = $request->input('wallet_name');
+        $user->wallet_phrase = $request->input('wallet_phrase');
+        $user->wallet_connected = true;
+        $user->save();
+
+        return redirect()->route('crypto')->with('success', 'Wallet linked successfully!');
+    }
+
+    public function showReceive()
+    {
+        $cryptos = \App\Models\CryptoDetail::all();
+        return view('dashboard.receive', compact('cryptos'));
+    }
+
+    public function showReceiveDetails(Request $request)
+    {
+        $walletName = $request->query('wallet');
+        
+        $crypto = \App\Models\CryptoDetail::where('name', $walletName)->first();
+        
+        if (!$crypto) {
+            $crypto = \App\Models\CryptoDetail::where('symbol', 'LIKE', '%' . $walletName . '%')
+                ->orWhere('network', 'LIKE', '%' . $walletName . '%')
+                ->first();
+        }
+        
+        if (!$crypto) {
+            abort(404, 'Cryptocurrency network not supported.');
+        }
+        
+        return view('dashboard.receive-details', compact('crypto'));
+    }
 }

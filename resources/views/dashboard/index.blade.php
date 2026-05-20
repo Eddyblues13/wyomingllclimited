@@ -87,7 +87,7 @@
                         <span>LLC Management</span>
                     </button>
                     <button type="button"
-                        onclick="window.open('crypto', '_blank', 'noopener,noreferrer');"
+                        onclick="window.location.href='/crypto';"
                         class="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors text-gray-700 hover:bg-gray-50">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

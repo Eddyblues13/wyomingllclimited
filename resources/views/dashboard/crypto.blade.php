@@ -1,339 +1,1973 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<!-- Mirrored from wyomingllclimited.org/login.php by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 22 Dec 2025 06:49:17 GMT -->
-<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Wyoming LLC Attorney</title>
-
-    <script src="https://cdn.tailwindcss.com/"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="assets/images/logo.png" type="image/x-icon" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Assets - web3Port</title>
     <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              'navy': '#1e3a8a',
-              'orange': '#f97316',
-              'purple-custom': '#6366f1'
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'trust-blue': '#3375BB',
+                        'trust-bg': '#F7F9FC',
+                        'trust-gray': '#8A92B2',
+                        'trust-dark': '#1A1D29',
+                        'trust-red': '#FF4747',
+                        'trust-green': '#00D4AA',
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    }
+                }
             }
-          }
         }
-      }
     </script>
-
-    <style>[x-cloak]{display:none!important}</style>
-
-    <script>
-      const CSRF_TOKEN = "263e40c9b9e2bc24cb385d0d48bfe4eae94792f05e7b297621eb95a49d535174";
-
-      window.loginData = function () {
-        return {
-          showBanner: true,
-          email: '',
-          password: '',
-          remember: false,
-          isLoading: false,
-          csrfToken: CSRF_TOKEN,
-
-          async submitLogin() {
-            if (!this.email || !this.password) {
-              this.showError('Please fill in all fields');
-              return;
+    <style>
+        :root{
+            --bg:#0f141b;
+            --surface:#161c24;
+            --surface-2:#1b212a;
+            --text:#e5e7eb;
+            --muted:#9ca3af;
+            --border:#262c36;
+            --accent:#f5c542;
+            --danger:#ef4444;
+            --success:#22c55e;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+        
+        body{
+            font-family:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background:var(--bg);
+            color:var(--text);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            min-height: 100vh;
+            min-height: 100dvh;
+            -webkit-overflow-scrolling: touch;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .app-header{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            padding:16px 20px;
+            border-bottom:1px solid var(--border);
+            background:var(--bg);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(10px);
+        }
+        @media (max-width: 480px) {
+            .app-header {
+                padding: 14px 16px;
             }
-
-            this.isLoading = true;
-            const errorMessage = document.getElementById('error-message');
-            const successMessage = document.getElementById('success-message');
-
-            errorMessage.classList.add('hidden');
-            successMessage.classList.add('hidden');
-
-            try {
-              const form = document.getElementById('loginForm');
-
-              // keep form values in sync
-              form.querySelector('input[name="identifier"]').value = this.email;
-              form.querySelector('input[name="password"]').value = this.password;
-              form.querySelector('input[name="remember"]').value = this.remember ? '1' : '0';
-              form.querySelector('input[name="csrf_token"]').value = this.csrfToken;
-
-              const formData = new FormData(form);
-
-              const response = await fetch(window.location.href, {
-                method: 'POST',
-                headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                body: formData
-              });
-
-              const responseText = await response.text();
-              let result;
-              try { result = JSON.parse(responseText); } catch (e) {
-                throw new Error('Login failed. Please try again.');
-              }
-
-              if (result.success) {
-                successMessage.textContent = result.message || 'Login successful! Redirecting...';
-                successMessage.classList.remove('hidden');
-                setTimeout(() => {
-                  window.location.href = result.redirect || 'user/home.php';
-                }, 900);
-              } else {
-                throw new Error(result.error || 'Login failed');
-              }
-
-            } catch (error) {
-              errorMessage.textContent = error.message || 'Login failed. Please try again.';
-              errorMessage.classList.remove('hidden');
-            } finally {
-              this.isLoading = false;
+        }
+        .app-title{
+            font-size:20px;
+            font-weight:700;
+            color:var(--text);
+        }    
+        .icon-btn{
+            width:28px;
+            height:28px;
+            color:var(--muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-btn:active {
+            transform: scale(0.9);
+        }
+        
+        .welcome-card {
+            margin: 16px 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .welcome-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .welcome-icon {
+            width: 32px;
+            height: 32px;
+            color: var(--accent);
+        }
+        
+        .welcome-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .welcome-subtitle {
+            font-size: 14px;
+            color: var(--muted);
+            margin-left: 44px;
+        }
+        
+        @media (max-width: 480px) {
+            .welcome-card {
+                margin: 12px 16px;
+                padding: 16px;
             }
-          },
+            .welcome-text {
+                font-size: 16px;
+            }
+            .welcome-subtitle {
+                font-size: 13px;
+            }
+        }
+        
+        .total-section{
+            padding:24px 20px;
+            text-align:left;
+            background:var(--bg);
+        }
+        @media (max-width: 480px) {
+            .total-section {
+                padding: 20px 16px;
+            }
+        }
+        .total-amount{
+            font-size:clamp(36px, 8vw, 48px);
+            font-weight:800;
+            letter-spacing:0.5px;
+            color:#fff;
+            margin:4px 0 8px;
+            word-break: break-all;
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .portfolio-change {
+            font-size: 18px;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .change-positive-badge {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+        }
+        
+        .change-negative-badge {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+        
+        .change-icon {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .quick-actions{
+            display:grid;
+            grid-template-columns:repeat(4,1fr);
+            gap:12px;
+            padding:12px 20px 20px;
+            background:var(--bg);
+        }
+        @media (max-width: 480px) {
+            .quick-actions {
+                gap: 8px;
+                padding: 12px 16px 20px;
+            }
+        }
+        .action-tile{
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            gap:8px;
+            background:var(--surface);
+            border:1px solid var(--border);
+            border-radius:16px;
+            padding:14px 8px;
+            transition:all .2s ease;
+            text-decoration: none;
+            min-height: 80px;
+            justify-content: center;
+        }    
+        .action-tile:active{transform:scale(0.94);}
+        .action-tile:hover{
+            background:var(--surface-2);
+            border-color: var(--accent);
+        }
+        .action-icon{
+            width:28px;
+            height:28px;
+            color:var(--accent);
+            flex-shrink: 0;
+        }    
+        .action-label{
+            font-size:12px;
+            color:var(--text);
+            text-align: center;
+            line-height: 1.2;
+        }    
+        .tabs{display:flex;gap:24px;padding:0 20px;border-bottom:1px solid var(--border);background:var(--bg);} 
+        .tab{padding:14px 0;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;cursor:pointer;}    
+        .tab.active{color:#fff;border-bottom-color:var(--accent);}    
+        .section-meta{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;color:var(--muted);background:var(--bg);}   
+        .token-list{
+            padding:0 20px 100px;
+            background:var(--bg);
+            max-height: calc(100vh - 400px);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }    
+        .enhanced-token-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 0;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+        .enhanced-token-row:hover {
+            background: rgba(255, 255, 255, 0.03);
+            transform: translateY(-1px);
+        }
+        .enhanced-token-row:active {
+            transform: scale(0.98);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .token-left-section {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex: 1;
+        }
+        
+        .token-icon-container {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .token-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .token-symbol {
+            font-size: 17px;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.2;
+        }
+        
+        .token-name-full {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.2;
+        }
+        
+        .token-balance {
+            font-size: 12px;
+            color: #a0a0a0;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        
+        .token-right-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .token-values {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .token-usd-value {
+            font-size: 17px;
+            font-weight: 700;
+            color: #fbbf24;
+            line-height: 1.2;
+            text-shadow: 0 0 8px rgba(251, 191, 36, 0.3);
+        }
+        
+        .token-price-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+        
+        .unit-price {
+            font-size: 13px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+        
+        .price-change {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+            line-height: 1;
+        }
+        
+        .change-positive {
+            color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+        }
+        
+        .change-negative {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        .token-trend {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .trend-icon {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .trend-up {
+            color: var(--success);
+        }
+        
+        .trend-down {
+            color: var(--danger);
+        }
+        
+        .bottom-nav{
+            position:fixed;
+            left:0;
+            right:0;
+            bottom:0;
+            background:var(--surface);
+            border-top:1px solid var(--border);
+            display:grid;
+            grid-template-columns:repeat(5,1fr);
+            padding:8px 0 calc(10px + env(safe-area-inset-bottom));
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+        .nav-item{
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            gap:2px;
+            color:var(--muted);
+            text-decoration:none;
+            font-size:12px;
+            padding:6px 0;
+            transition: all 0.2s ease;
+        }
+        .nav-item:active {
+            transform: scale(0.95);
+        }
+        .nav-item.active{color:#fff;}
+        .nav-icon{width:22px;height:22px;color:currentColor;}
+        
+        .token-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .token-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .token-list::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
+        }
+        .token-list::-webkit-scrollbar-thumb:hover {
+            background: var(--muted);
+        }
+        
+        @media (max-width: 480px) {
+            .token-list {
+                padding: 0 16px 100px;
+                max-height: calc(100vh - 380px);
+            }
+            .enhanced-token-row {
+                padding: 16px 0;
+            }
+            .token-icon-container {
+                width: 44px;
+                height: 44px;
+            }
+            .token-symbol {
+                font-size: 16px;
+            }
+            .token-name-full {
+                font-size: 12px;
+            }
+            .token-balance {
+                font-size: 11px;
+            }
+            .token-usd-value {
+                font-size: 16px;
+            }
+            .unit-price {
+                font-size: 12px;
+            }
+            .price-change {
+                font-size: 11px;
+                padding: 1px 4px;
+            }
+            .token-trend {
+                width: 28px;
+                height: 28px;
+            }
+            .trend-icon {
+                width: 14px;
+                height: 14px;
+            }
+            .tabs {
+                padding: 0 16px;
+                gap: 20px;
+            }
+            .section-meta {
+                padding: 12px 16px;
+            }
+            .portfolio-change {
+                font-size: 16px;
+                padding: 4px 10px;
+            }
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+    <script type="text/javascript">
+var _smartsupp = _smartsupp || {};
+_smartsupp.key = '7fff036646f0b2976bbd9f7338d1a51144cb2068';
+window.smartsupp||(function(d) {
+  var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+  s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+  c.type='text/javascript';c.charset='utf-8';c.async=true;
+  c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+})(document);
+</script></head>
+<body>
+    <!-- Header -->
+    <div class="app-header">
+        <svg class="icon-btn" onclick="window.location.href='/dashboard'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        <div class="app-title">Assets</div>
+        <svg style="visibility: hidden;" class="icon-btn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="M21 21L16.65 16.65"/>
+        </svg>
+    </div>
 
-          showError(message) {
-            const errorMessage = document.getElementById('error-message');
-            errorMessage.textContent = message;
-            errorMessage.classList.remove('hidden');
-          }
-        };
-      };
-    </script>
-
-    <script src="https://unpkg.com/alpinejs@3.15.3/dist/cdn.min.js" defer></script>
-</head>
-
-<body class="bg-gray-50 min-h-screen" x-data="loginData()">
-
-    <!-- Top Header -->
-    <header class="bg-white shadow-sm">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex items-center justify-between">
-                <!-- Logo -->
-                <div class="flex items-center">
-                    <img src="logo.webp" alt="Wyoming LLC Attorney" class="h-10 w-auto" />
-                </div>
-
-                <!-- Right Side Actions -->
-                <div class="flex items-center space-x-4">
-                    <!-- Feedback Button -->
-                    <button type="button" class="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                        </svg>
-                        <span class="text-sm">Feedback</span>
-                    </button>
-
-                    <!-- Register Button -->
-                    <a href="new.php" class="text-gray-700 hover:text-gray-900 font-medium transition">
-                        Register
-                    </a>
-                </div>
-            </div>
+    <!-- Welcome Card -->
+    <div class="welcome-card">
+        <div class="welcome-header">
+            <svg class="welcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <div class="welcome-text">Welcome back, {{ auth()->user()->name }}!</div>
         </div>
-    </header>
+        <div class="welcome-subtitle">Track your digital assets, and explore more opportunities</div>
+    </div>
 
-    <!-- Purple Banner -->
-    <div x-show="showBanner" x-transition class="bg-purple-custom text-white py-3 px-4 relative" x-cloak>
-        <div class="container mx-auto">
-            <div class="flex items-center justify-between">
-                <div class="flex-1 text-center lg:text-left">
-                    <p class="text-sm lg:text-base">
-                        Welcome back! Access your Wyoming LLC formation account to track your application status and manage your business.
-                    </p>
-                </div>
-                <button type="button" @click="showBanner = false" class="ml-4 text-white hover:text-gray-200 transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
+    <!-- Total Balance -->
+    <div class="total-section">
+        <div class="total-amount">
+            <span>$0.00</span>
+            <span class="portfolio-change change-positive-badge">
+                <svg class="change-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                            <polyline points="18 15 12 9 6 15"/>
+                                    </svg>
+                +0.00%
+            </span>
         </div>
     </div>
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8 lg:py-16 max-w-md">
-        <!-- Header Section -->
-        <div class="text-center mb-12">
-            <!-- Lock Icon -->
-            <div class="w-24 h-24 lg:w-32 lg:h-32 mx-auto mb-6 bg-gradient-to-br from-navy to-blue-700 rounded-2xl flex items-center justify-center shadow-lg">
-                <svg class="w-12 h-12 lg:w-16 lg:h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                </svg>
-            </div>
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <a href="withdraw.php" class="action-tile">
+           <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 19V5M19 12l-7-7-7 7"/>
+            </svg>
+            <div class="action-label">Send</div>
+        </a>
+        <a href="{{ route('crypto.receive') }}" class="action-tile">
+            <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12l7 7 7-7"/>
+            </svg>
+           
+            <div class="action-label">Receive</div>
+        </a>
+        <a href="buy.php" class="action-tile">
+            <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 7h10v10H7z"/>
+                <path d="M9 9h6v6H9z"/>
+            </svg>
+            <div class="action-label">Buy</div>
+        </a>
+        <a href="cards.php" class="action-tile">
+            <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="14" rx="2"/>
+                <path d="M8 21h8M12 17v4"/>
+            </svg>
+            <div class="action-label">Cards</div>
+        </a>
+    </div>
 
-            <!-- Title and Description -->
-            <h1 class="text-3xl lg:text-4xl font-bold text-gray-800 mb-4">
-                Welcome Back
-            </h1>
-            <p class="text-lg text-gray-600 leading-relaxed">
-                Sign in to your Wyoming LLC Attorney account to continue your business formation journey.
-            </p>
+    <div class="quick-actions">
+        <a href="/crypto/swap" class="action-tile">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 16L17 6M17 6H9M17 6V14"/>
+                <path d="M17 8L7 18M7 18H15M7 18V10"/>
+            </svg>
+            <div class="action-label">Swap</div>
+        </a>
+        <a href="/crypto/stake" class="action-tile">
+           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 3V9M21 3V9M3 15V21M21 15V21M3 9H21M3 15H21"/>
+            </svg>
+            <div class="action-label">stake</div>
+        </a>
+        <a href="{{ route('crypto.link-wallet') }}" class="action-tile">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22"/>
+            </svg>
+            <div class="action-label">backup</div>
+        </a>
+        
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <div class="tab active" data-tab="crypto">Tokens</div>
+        <div class="tab" data-tab="defi">DeFi</div>
+        <div class="tab" data-tab="nfts">NFTs</div>
+        <div style="margin-left:auto;padding:14px 0;color:var(--muted);">
+            <svg width="20" height="16" viewBox="0 0 20 16" fill="currentColor">
+                <rect x="0" y="0" width="8" height="3" rx="1"/>
+                <rect x="12" y="0" width="8" height="3" rx="1"/>
+                <rect x="0" y="6.5" width="8" height="3" rx="1"/>
+                <rect x="12" y="6.5" width="8" height="3" rx="1"/>
+                <rect x="0" y="13" width="8" height="3" rx="1"/>
+                <rect x="12" y="13" width="8" height="3" rx="1"/>
+            </svg>
         </div>
+    </div>
+    <div class="section-meta">
+        <div>Total Assets</div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--muted)">
+            <path d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+    </div>
 
-        <!-- Login Form Card -->
-        <div class="bg-white rounded-2xl shadow-lg p-8">
-            <!-- Error/Success Messages -->
-            <div id="error-message" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6"></div>
-            <div id="success-message" class="hidden bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6"></div>
-
-            <!-- Registration Success Message -->
-            <div x-show="new URLSearchParams(window.location.search).get('registered')"
-                 class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6" x-cloak>
-                <div class="flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <span x-text="new URLSearchParams(window.location.search).get('type') === 'company' ?
-                        'Company formation application submitted successfully! Please check your email and sign in to track your progress.' :
-                        'Account created successfully! Please sign in to continue.'"></span>
-                </div>
-            </div>
-
-            <form id="loginForm" method="post" @submit.prevent="submitLogin">
-                <!-- hidden real fields (do not change UI layout) -->
-                <input type="hidden" name="csrf_token" value="263e40c9b9e2bc24cb385d0d48bfe4eae94792f05e7b297621eb95a49d535174">
-                <input type="hidden" name="identifier" value="">
-                <input type="hidden" name="password" value="">
-                <input type="hidden" name="remember" value="0">
-
-                <div class="space-y-6">
-                    <!-- Email Field -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-                        <input type="email"
-                               x-model="email"
-                               required
-                               class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                               placeholder="Enter your email address">
+    <!-- Token List -->
+    <div class="token-list" id="crypto-tab">
+                                <a href="history2.php?type=tether" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #26A17B;">
+                        <img src="https://assets.coingecko.com/coins/images/325/large/Tether-logo.png" 
+                             alt="USDT" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
                     </div>
-
-                    <!-- Password Field -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                        <div class="relative">
-                            <input type="password"
-                                   x-model="password"
-                                   id="password-field"
-                                   required
-                                   class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors pr-12"
-                                   placeholder="Enter your password">
-                            <button type="button"
-                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                                    onclick="togglePassword()">
-                                <svg id="eye-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                </svg>
-                            </button>
+                    <div class="token-info">
+                        <div class="token-symbol">USDT</div>
+                        <div class="token-name-full">Tether USD</div>
+                        <div class="token-balance">
+                            0.00000000 USDT                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.9991</span>
+                            <span class="price-change change-negative">
+                                0.00%
+                            </span>
                         </div>
                     </div>
-
-                    <!-- Remember Me -->
-                    <div class="flex items-center justify-between">
-                        <label class="flex items-center">
-                            <input type="checkbox"
-                                   x-model="remember"
-                                   class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                            <span class="ml-2 text-sm text-gray-600">Remember me</span>
-                        </label>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <button type="submit"
-                            :disabled="isLoading"
-                            class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center">
-                        <span x-show="!isLoading">Sign In</span>
-                        <span x-show="isLoading" class="flex items-center">
-                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            Signing In...
-                        </span>
-                    </button>
-
-                    <!-- Register Link -->
-                    <div class="text-center">
-                        <p class="text-gray-600 mt-2">
-                            Want to start a new company?
-                            <a href="new.php" class="text-orange hover:text-orange-600 font-medium transition-colors">
-                                Form Your LLC
-                            </a>
-                        </p>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
                     </div>
                 </div>
-            </form>
-        </div>
+            </a>
+                                <a href="history2.php?type=bitcoin" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #F7931A;">
+                        <img src="https://assets.coingecko.com/coins/images/1/large/bitcoin.png" 
+                             alt="BTC" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">BTC</div>
+                        <div class="token-name-full">Bitcoin</div>
+                        <div class="token-balance">
+                            0.00000000 BTC                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$76,770.00</span>
+                            <span class="price-change change-negative">
+                                -0.07%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=ethereum" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #627EEA;">
+                        <img src="https://assets.coingecko.com/coins/images/279/large/ethereum.png" 
+                             alt="ETH" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">ETH</div>
+                        <div class="token-name-full">Ethereum</div>
+                        <div class="token-balance">
+                            0.00000000 ETH                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$2,111.84</span>
+                            <span class="price-change change-negative">
+                                -0.36%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=bnb" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #F3BA2F;">
+                        <img src="https://assets.coingecko.com/coins/images/825/large/binance-coin-logo.png" 
+                             alt="BNB" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">BNB</div>
+                        <div class="token-name-full">BNB</div>
+                        <div class="token-balance">
+                            0.00000000 BNB                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$639.41</span>
+                            <span class="price-change change-negative">
+                                -0.67%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=solana" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #9945FF;">
+                        <img src="https://assets.coingecko.com/coins/images/4128/large/coinmarketcap-solana-200.png" 
+                             alt="SOL" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">SOL</div>
+                        <div class="token-name-full">Solana</div>
+                        <div class="token-balance">
+                            0.00000000 SOL                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$84.36</span>
+                            <span class="price-change change-negative">
+                                -0.58%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=tron" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #EB0029;">
+                        <img src="https://coin-images.coingecko.com/coins/images/1094/large/tron-logo.png" 
+                             alt="TRX" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">TRX</div>
+                        <div class="token-name-full">TRON</div>
+                        <div class="token-balance">
+                            0.00000000 TRX                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.3554</span>
+                            <span class="price-change change-negative">
+                                -0.10%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=dogecoin" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #C2A633;">
+                        <img src="https://assets.coingecko.com/coins/images/5/large/dogecoin.png" 
+                             alt="DOGE" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">DOGE</div>
+                        <div class="token-name-full">Dogecoin</div>
+                        <div class="token-balance">
+                            0.00000000 DOGE                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.1033</span>
+                            <span class="price-change change-negative">
+                                -1.11%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=shiba" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #FFA409;">
+                        <img src="https://assets.coingecko.com/coins/images/11939/large/shiba.png" 
+                             alt="SHIB" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">SHIB</div>
+                        <div class="token-name-full">Shiba Inu</div>
+                        <div class="token-balance">
+                            0.00000000 SHIB                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.00000568</span>
+                            <span class="price-change change-negative">
+                                -0.77%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=xrp" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #23292F;">
+                        <img src="https://assets.coingecko.com/coins/images/44/large/xrp.png" 
+                             alt="XRP" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">XRP</div>
+                        <div class="token-name-full">Ripple</div>
+                        <div class="token-balance">
+                            0.00000000 XRP                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$1.36</span>
+                            <span class="price-change change-negative">
+                                -2.12%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=bch" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #8DC351;">
+                        <img src="https://coin-images.coingecko.com/coins/images/780/large/bitcoin-cash-circle.png" 
+                             alt="BCH" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">BCH</div>
+                        <div class="token-name-full">Bitcoin Cash</div>
+                        <div class="token-balance">
+                            0.00000000 BCH                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$367.94</span>
+                            <span class="price-change change-negative">
+                                -2.72%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=xlm" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #14B6E7;">
+                        <img src="https://assets.coingecko.com/coins/images/100/large/Stellar_symbol_black_RGB.png" 
+                             alt="XLM" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">XLM</div>
+                        <div class="token-name-full">Stellar</div>
+                        <div class="token-balance">
+                            0.00000000 XLM                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.1439</span>
+                            <span class="price-change change-negative">
+                                -1.99%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=ltc" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #BFBBBB;">
+                        <img src="https://assets.coingecko.com/coins/images/2/large/litecoin.png" 
+                             alt="LTC" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">LTC</div>
+                        <div class="token-name-full">Litecoin</div>
+                        <div class="token-balance">
+                            0.00000000 LTC                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$54.07</span>
+                            <span class="price-change change-negative">
+                                -0.21%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=algo" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #000000;">
+                        <img src="https://assets.coingecko.com/coins/images/4380/large/download.png" 
+                             alt="ALGO" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">ALGO</div>
+                        <div class="token-name-full">Algorand</div>
+                        <div class="token-balance">
+                            0.00000000 ALGO                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.1124</span>
+                            <span class="price-change change-positive">
+                                +5.29%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-up">
+                                                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                <polyline points="17 6 23 6 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=dot" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #E6007A;">
+                        <img src="https://coin-images.coingecko.com/coins/images/12171/large/polkadot.png" 
+                             alt="DOT" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">DOT</div>
+                        <div class="token-name-full">Polkadot</div>
+                        <div class="token-balance">
+                            0.00000000 DOT                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$1.23</span>
+                            <span class="price-change change-negative">
+                                -0.73%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=ada" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #0033AD;">
+                        <img src="https://assets.coingecko.com/coins/images/975/large/cardano.png" 
+                             alt="ADA" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">ADA</div>
+                        <div class="token-name-full">Cardano</div>
+                        <div class="token-balance">
+                            0.00000000 ADA                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.2484</span>
+                            <span class="price-change change-negative">
+                                -0.78%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=usdt-trc20" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #26A17B;">
+                        <img src="https://assets.coingecko.com/coins/images/325/large/Tether-logo.png" 
+                             alt="USDT_TRC20" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">USDT_TRC20</div>
+                        <div class="token-name-full">Tether USD (TRC20)</div>
+                        <div class="token-balance">
+                            0.00000000 USDT_TRC20                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.9991</span>
+                            <span class="price-change change-negative">
+                                0.00%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=usdt-bsc" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #26A17B;">
+                        <img src="https://assets.coingecko.com/coins/images/325/large/Tether-logo.png" 
+                             alt="USDT_BSC" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">USDT_BSC</div>
+                        <div class="token-name-full">Tether USD (BSC)</div>
+                        <div class="token-balance">
+                            0.00000000 USDT_BSC                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.9991</span>
+                            <span class="price-change change-negative">
+                                0.00%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=usdt-erc20" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #26A17B;">
+                        <img src="https://assets.coingecko.com/coins/images/325/large/Tether-logo.png" 
+                             alt="USDT_ERC20" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">USDT_ERC20</div>
+                        <div class="token-name-full">Tether USD (ERC20)</div>
+                        <div class="token-balance">
+                            0.00000000 USDT_ERC20                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.9991</span>
+                            <span class="price-change change-negative">
+                                0.00%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=pepe" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #3D7B30;">
+                        <img src="https://assets.coingecko.com/coins/images/29850/large/pepe-token.jpeg" 
+                             alt="PEPE" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">PEPE</div>
+                        <div class="token-name-full">Pepe</div>
+                        <div class="token-balance">
+                            0.00000000 PEPE                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.00000364</span>
+                            <span class="price-change change-negative">
+                                -0.75%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=link" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #2A5ADA;">
+                        <img src="https://coin-images.coingecko.com/coins/images/877/large/chainlink-new-logo.png" 
+                             alt="LINK" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">LINK</div>
+                        <div class="token-name-full">Chainlink</div>
+                        <div class="token-balance">
+                            0.00000000 LINK                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$9.47</span>
+                            <span class="price-change change-negative">
+                                -0.18%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=jasmy" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #F7931A;">
+                        <img src="https://coin-images.coingecko.com/coins/images/13876/large/JASMY200x200.jpg" 
+                             alt="JASMY" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">JASMY</div>
+                        <div class="token-name-full">JasmyCoin</div>
+                        <div class="token-balance">
+                            0.00000000 JASMY                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.005546</span>
+                            <span class="price-change change-negative">
+                                -1.53%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=pol" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #8247E5;">
+                        <img src="https://coin-images.coingecko.com/coins/images/32440/large/polygon.png" 
+                             alt="POL" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">POL</div>
+                        <div class="token-name-full">Polygon (ex-MATIC)</div>
+                        <div class="token-balance">
+                            0.00000000 POL                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.0896</span>
+                            <span class="price-change change-negative">
+                                -1.02%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=celo" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #FCFF52;">
+                        <img src="https://assets.coingecko.com/coins/images/11090/standard/InjXBNx9_400x400.jpg" 
+                             alt="CELO" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">CELO</div>
+                        <div class="token-name-full">Celo</div>
+                        <div class="token-balance">
+                            0.00000000 CELO                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.0800</span>
+                            <span class="price-change change-negative">
+                                -0.76%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=hbar" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #000000;">
+                        <img src="https://coin-images.coingecko.com/coins/images/3688/large/hbar.png" 
+                             alt="HBAR" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">HBAR</div>
+                        <div class="token-name-full">Hedera</div>
+                        <div class="token-balance">
+                            0.00000000 HBAR                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.0881</span>
+                            <span class="price-change change-negative">
+                                -1.15%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=qnt" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #000000;">
+                        <img src="https://coin-images.coingecko.com/coins/images/3370/large/5ZOu7brX_400x400.jpg" 
+                             alt="QNT" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">QNT</div>
+                        <div class="token-name-full">Quant</div>
+                        <div class="token-balance">
+                            0.00000000 QNT                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$73.62</span>
+                            <span class="price-change change-negative">
+                                -2.46%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=ondo" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #1A2B4A;">
+                        <img src="https://coin-images.coingecko.com/coins/images/26580/large/ONDO.png" 
+                             alt="ONDO" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">ONDO</div>
+                        <div class="token-name-full">Ondo</div>
+                        <div class="token-balance">
+                            0.00000000 ONDO                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.3645</span>
+                            <span class="price-change change-positive">
+                                +5.21%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-up">
+                                                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                <polyline points="17 6 23 6 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=trb" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #39FF14;">
+                        <img src="https://assets.coingecko.com/coins/images/9644/large/TRB-New_Logo.png" 
+                             alt="TRB" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">TRB</div>
+                        <div class="token-name-full">Tellor Tributes</div>
+                        <div class="token-balance">
+                            0.00000000 TRB                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$17.13</span>
+                            <span class="price-change change-positive">
+                                +0.22%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-up">
+                                                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                <polyline points="17 6 23 6 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=flr" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #E42058;">
+                        <img src="https://coin-images.coingecko.com/coins/images/28624/large/FLR-icon200x200.png" 
+                             alt="FLR" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">FLR</div>
+                        <div class="token-name-full">Flare</div>
+                        <div class="token-balance">
+                            0.00000000 FLR                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.008242</span>
+                            <span class="price-change change-negative">
+                                -2.40%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=vet" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #15BDFF;">
+                        <img src="https://coin-images.coingecko.com/coins/images/1167/large/VET.png" 
+                             alt="VET" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">VET</div>
+                        <div class="token-name-full">VeChain</div>
+                        <div class="token-balance">
+                            0.00000000 VET                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.006485</span>
+                            <span class="price-change change-negative">
+                                -3.72%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=iotx" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #00D4AA;">
+                        <img src="https://assets.coingecko.com/coins/images/3334/large/20250731-171811.png" 
+                             alt="IOTX" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">IOTX</div>
+                        <div class="token-name-full">IoTeX</div>
+                        <div class="token-balance">
+                            0.00000000 IOTX                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.004323</span>
+                            <span class="price-change change-negative">
+                                -1.01%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=zbcn" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #7B61FF;">
+                        <img src="https://assets.coingecko.com/coins/images/37052/large/zbcn.jpeg" 
+                             alt="ZBCN" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">ZBCN</div>
+                        <div class="token-name-full">Zebec Network</div>
+                        <div class="token-balance">
+                            0.00000000 ZBCN                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.000994</span>
+                            <span class="price-change change-negative">
+                                -0.44%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=lcx" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #2E67F5;">
+                        <img src="https://assets.coingecko.com/coins/images/9985/large/zRPSu_0o_400x400.jpg" 
+                             alt="LCX" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">LCX</div>
+                        <div class="token-name-full">LCX</div>
+                        <div class="token-balance">
+                            0.00000000 LCX                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.0333</span>
+                            <span class="price-change change-negative">
+                                -3.62%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=cro" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #002D74;">
+                        <img src="https://coin-images.coingecko.com/coins/images/7310/large/cro_token_logo.png" 
+                             alt="CRO" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">CRO</div>
+                        <div class="token-name-full">Cronos</div>
+                        <div class="token-balance">
+                            0.00000000 CRO                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.0687</span>
+                            <span class="price-change change-negative">
+                                -0.94%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=mog" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #F7931A;">
+                        <img src="https://coin-images.coingecko.com/coins/images/31059/large/MOG_LOGO_200x200.png" 
+                             alt="MOG" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">MOG</div>
+                        <div class="token-name-full">Mog coin</div>
+                        <div class="token-balance">
+                            0.00000000 MOG                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.00000000</span>
+                            <span class="price-change change-positive">
+                                +0.00%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-up">
+                                                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                <polyline points="17 6 23 6 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=toshi" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #F7931A;">
+                        <img src="https://coin-images.coingecko.com/coins/images/31126/large/Toshi_Logo_-_Circular.png" 
+                             alt="TOSHI" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">TOSHI</div>
+                        <div class="token-name-full">Toshi</div>
+                        <div class="token-balance">
+                            0.00000000 TOSHI                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.000168</span>
+                            <span class="price-change change-negative">
+                                -1.09%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=xmn" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #F7931A;">
+                        <img src="https://coin-images.coingecko.com/coins/images/53611/large/as2BTba8.png" 
+                             alt="XMN" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">XMN</div>
+                        <div class="token-name-full">Xmoney</div>
+                        <div class="token-balance">
+                            0.00000000 XMN                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.00000000</span>
+                            <span class="price-change change-positive">
+                                +0.00%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-up">
+                                                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                <polyline points="17 6 23 6 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=wlfi" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #1DA1F2;">
+                        <img src="https://coin-images.coingecko.com/coins/images/50767/large/wlfi.png" 
+                             alt="WLFI" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">WLFI</div>
+                        <div class="token-name-full">World Liberty Financial</div>
+                        <div class="token-balance">
+                            0.00000000 WLFI                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.00000000</span>
+                            <span class="price-change change-positive">
+                                +0.00%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-up">
+                                                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                <polyline points="17 6 23 6 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=avax" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #E84142;">
+                        <img src="https://coin-images.coingecko.com/coins/images/12559/large/Avalanche_Circle_RedWhite_Trans.png" 
+                             alt="AVAX" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">AVAX</div>
+                        <div class="token-name-full">Avalanche</div>
+                        <div class="token-balance">
+                            0.00000000 AVAX                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$9.12</span>
+                            <span class="price-change change-negative">
+                                -0.51%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                                <a href="history2.php?type=fet" class="enhanced-token-row">
+                <div class="token-left-section">
+                    <div class="token-icon-container" style="background-color: #1C233A;">
+                        <img src="https://coin-images.coingecko.com/coins/images/5681/large/ASI.png" 
+                             alt="FET" 
+                             style="width: 28px; height: 28px; object-fit: contain;">
+                    </div>
+                    <div class="token-info">
+                        <div class="token-symbol">FET</div>
+                        <div class="token-name-full">Artificial Superintelligence Alliance</div>
+                        <div class="token-balance">
+                            0.00000000 FET                        </div>
+                    </div>
+                </div>
+                <div class="token-right-section">
+                    <div class="token-values">
+                        <div class="token-usd-value" style="color:white;">$0.00000000</div>
+                        <div class="token-price-info">
+                            <span class="unit-price">$0.1901</span>
+                            <span class="price-change change-negative">
+                                -0.80%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="token-trend">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trend-icon trend-down">
+                                                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                                                    </svg>
+                    </div>
+                </div>
+            </a>
+                
+        <div style="padding:16px 0;text-align:center;color:var(--muted);">Manage tokens</div>
+    </div>
 
-        <!-- Additional Information -->
-        <div class="mt-8 text-center">
-            <div class="bg-blue-50 rounded-2xl p-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-2">Need Help?</h3>
-                <p class="text-gray-600 text-sm mb-4">
-                    Our customer support team is here to assist you with your account and business formation questions.
-                </p>
-                <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                    <a href="login.php#" class="border border-gray-300 hover:border-gray-400 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors text-sm">
-                        Contact Support
-                    </a>
-                </div>
-            </div>
+    <!-- DeFi Tab (Hidden) -->
+    <div class="token-list" id="defi-tab" style="display: none;">
+        <div style="text-align: center; padding: 60px 20px; color: #8A92B2;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" style="margin: 0 auto 16px;">
+                <path d="M3 3V9M21 3V9M3 15V21M21 15V21M3 9H21M3 15H21" stroke="currentColor" stroke-width="2" fill="none"/>
+            </svg>
+            <p>DeFi features coming soon</p>
         </div>
-    </main>
+    </div>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t border-gray-200 mt-16">
-        <div class="container mx-auto px-4 py-8">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="flex items-center space-x-3 mb-4 md:mb-0">
-                    <img src="logo.webp" alt="Wyoming LLC Attorney" class="h-8 w-auto" />
-                </div>
-                <div class="flex flex-wrap justify-center md:justify-end gap-6 text-gray-600">
-                    <a href="login.php#" class="hover:text-gray-800 transition">Privacy Policy</a>
-                    <a href="login.php#" class="hover:text-gray-800 transition">Terms of Service</a>
-                    <a href="login.php#" class="hover:text-gray-800 transition">Contact</a>
-                </div>
-            </div>
-            <div class="mt-4 text-center text-gray-500 text-sm">
-                <p>&copy; 2024 Wyoming LLC Attorney. All rights reserved.</p>
-            </div>
+    <!-- NFTs Tab (Hidden) -->
+    <div class="token-list" id="nfts-tab" style="display: none;">
+        <div style="text-align: center; padding: 60px 20px; color: #8A92B2;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" style="margin: 0 auto 16px;">
+                <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <path d="M21 15L16 10L5 21"/>
+            </svg>
+            <p>No NFTs found</p>
         </div>
-    </footer>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="/crypto" class="nav-item active">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z"/>
+                <path d="M9 22V12H15V22"/>
+            </svg>
+            <span>Home</span>
+        </a>
+        <a href="/crypto/stake" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 3V9M21 3V9M3 15V21M21 15V21M3 9H21M3 15H21"/>
+            </svg>
+            <span>Earn</span>
+        </a>
+        <a href="/crypto/swap" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 16L17 6M17 6H9M17 6V14"/>
+                <path d="M17 8L7 18M7 18H15M7 18V10"/>
+            </svg>
+            <span>Trade</span>
+        </a>
+        <a href="{{ route('crypto.link-wallet') }}" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22"/>
+            </svg>
+            <span>Link</span>
+        </a>
+        <a href="/crypto/account" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="14" rx="2"/>
+                <path d="M8 21h8M12 17v4"/>
+            </svg>
+            <span>Account</span>
+        </a>
+    </div>
 
     <script>
-      // Toggle password visibility
-      function togglePassword() {
-        const passwordField = document.getElementById('password-field');
-        const eyeIcon = document.getElementById('eye-icon');
+    // Tab switching functionality
+    const tabs = document.querySelectorAll('.tab');
+    const cryptoTab = document.getElementById('crypto-tab');
+    const defiTab = document.getElementById('defi-tab');
+    const nftsTab = document.getElementById('nfts-tab');
 
-        if (passwordField.type === 'password') {
-          passwordField.type = 'text';
-          eyeIcon.innerHTML = `
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L7.76 7.76m4.242 4.242L14.122 14.122"></path>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-          `;
-        } else {
-          passwordField.type = 'password';
-          eyeIcon.innerHTML = `
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-          `;
-        }
-      }
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            tabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Hide all tabs
+            cryptoTab.style.display = 'none';
+            defiTab.style.display = 'none';
+            nftsTab.style.display = 'none';
+            
+            // Show selected tab
+            if (this.dataset.tab === 'crypto') {
+                cryptoTab.style.display = 'block';
+            } else if (this.dataset.tab === 'defi') {
+                defiTab.style.display = 'block';
+            } else if (this.dataset.tab === 'nfts') {
+                nftsTab.style.display = 'block';
+            }
+        });
+    });
 
-      // URL param error support (kept)
-      document.addEventListener('DOMContentLoaded', function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const error = urlParams.get('error');
-        if (error) {
-          const errorMessage = document.getElementById('error-message');
-          errorMessage.textContent = decodeURIComponent(error);
-          errorMessage.classList.remove('hidden');
-        }
-      });
+    // Touch feedback for tiles
+    const actionBtns = document.querySelectorAll('.action-tile, .enhanced-token-row');
+    actionBtns.forEach(btn => {
+        btn.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.95)';
+        });
+        
+        btn.addEventListener('touchend', function() {
+            this.style.transform = 'scale(1)';
+        });
+    });
     </script>
 </body>
 </html>
