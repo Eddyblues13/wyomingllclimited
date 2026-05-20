@@ -431,7 +431,7 @@ window.smartsupp||(function(d) {
                 </svg>
             </div>
         </a>
-        <a href="cards.php" class="menu-item">
+        <a href="{{ route('crypto.cards') }}" class="menu-item">
             <div class="menu-item-left">
                 <div class="menu-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

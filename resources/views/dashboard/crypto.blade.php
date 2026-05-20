@@ -559,7 +559,7 @@ window.smartsupp||(function(d) {
             </svg>
             <div class="action-label">Buy</div>
         </a>
-        <a href="cards.php" class="action-tile">
+        <a href="{{ route('crypto.cards') }}" class="action-tile">
             <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="3" y="3" width="18" height="14" rx="2"/>
                 <path d="M8 21h8M12 17v4"/>

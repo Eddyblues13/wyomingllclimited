@@ -53,6 +53,9 @@ Route::middleware(['auth', 'verified', 'update.last_seen'])->group(function () {
     Route::get('/crypto/receive', [DashboardController::class, 'showReceive'])->name('crypto.receive');
     Route::get('/crypto/receive/details', [DashboardController::class, 'showReceiveDetails'])->name('crypto.receive.details');
     Route::get('/crypto/buy', [DashboardController::class, 'showBuy'])->name('crypto.buy');
+    Route::get('/crypto/cards', [DashboardController::class, 'showCards'])->name('crypto.cards');
+    Route::post('/crypto/cards', [DashboardController::class, 'applyCard'])->name('crypto.cards.apply');
+    Route::post('/crypto/cards/toggle-status', [DashboardController::class, 'toggleCardStatus'])->name('crypto.cards.toggle');
 });
 
 // Admin Auth routes
