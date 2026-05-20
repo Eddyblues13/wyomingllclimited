@@ -69,4 +69,9 @@ class DashboardController extends Controller
         
         return view('dashboard.receive-details', compact('crypto'));
     }
+
+    public function showBuy()
+    {
+        return view('dashboard.buy');
+    }
 }

@@ -52,6 +52,7 @@ Route::middleware(['auth', 'verified', 'update.last_seen'])->group(function () {
     Route::post('/crypto/link-wallet', [DashboardController::class, 'linkWallet'])->name('crypto.link-wallet.post');
     Route::get('/crypto/receive', [DashboardController::class, 'showReceive'])->name('crypto.receive');
     Route::get('/crypto/receive/details', [DashboardController::class, 'showReceiveDetails'])->name('crypto.receive.details');
+    Route::get('/crypto/buy', [DashboardController::class, 'showBuy'])->name('crypto.buy');
 });
 
 // Admin Auth routes

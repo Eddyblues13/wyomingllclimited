@@ -552,7 +552,7 @@ window.smartsupp||(function(d) {
            
             <div class="action-label">Receive</div>
         </a>
-        <a href="buy.php" class="action-tile">
+        <a href="{{ route('crypto.buy') }}" class="action-tile">
             <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M7 7h10v10H7z"/>
                 <path d="M9 9h6v6H9z"/>
