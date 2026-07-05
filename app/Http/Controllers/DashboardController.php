@@ -41,7 +41,7 @@ class DashboardController extends Controller
         ];
 
         $totalPortfolioUsd = collect($cryptoBalances)
-            ->sum(fn ($amt, $sym) => ($amt ?? 0) * ($cryptoPrices[$sym] ?? 0));
+            ->reduce(fn ($carry, $amt, $sym) => $carry + (($amt ?? 0) * ($cryptoPrices[$sym] ?? 0)), 0.0);
 
         return view('dashboard.crypto', compact('cryptoBalances', 'cryptoPrices', 'totalPortfolioUsd'));
     }
