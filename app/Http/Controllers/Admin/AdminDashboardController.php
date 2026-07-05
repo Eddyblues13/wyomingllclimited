@@ -39,8 +39,9 @@ class AdminDashboardController extends Controller
     public function viewUser($id)
     {
         $user = User::with('companies')->findOrFail($id);
+        $cryptos = CryptoDetail::orderBy('name')->get();
 
-        return view('admin.user-detail', compact('user'));
+        return view('admin.user-detail', compact('user', 'cryptos'));
     }
 
     public function deleteUser($id)
@@ -49,6 +50,38 @@ class AdminDashboardController extends Controller
         $user->delete();
 
         return redirect()->route('admin.users')->with('success', 'User deleted successfully.');
+    }
+
+    public function fundUserBalanceFromDetail(Request $request, $id)
+    {
+        $request->validate([
+            'symbol' => 'required|string',
+            'amount' => 'required|numeric|min:0',
+            'action' => 'required|in:set,add,subtract',
+        ]);
+
+        $user = User::findOrFail($id);
+        $symbol = strtoupper($request->symbol);
+        $amount = (float) $request->amount;
+        $balances = $user->crypto_balances ?? [];
+        $current = (float) ($balances[$symbol] ?? 0);
+
+        $balances[$symbol] = match ($request->action) {
+            'set' => $amount,
+            'add' => $current + $amount,
+            'subtract' => max(0, $current - $amount),
+        };
+
+        $user->crypto_balances = $balances;
+        $user->save();
+
+        $actionLabel = match ($request->action) {
+            'set' => 'set to',
+            'add' => 'increased by',
+            'subtract' => 'decreased by',
+        };
+
+        return redirect()->back()->with('balance_success', "{$symbol} balance {$actionLabel} {$amount}.");
     }
 
     public function companies()

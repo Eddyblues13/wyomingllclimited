@@ -527,13 +527,13 @@ window.smartsupp||(function(d) {
     <!-- Total Balance -->
     <div class="total-section">
         <div class="total-amount">
-            <span>$0.00</span>
+            <span>${{ number_format($totalPortfolioUsd, 2) }}</span>
+            @if($totalPortfolioUsd > 0)
             <span class="portfolio-change change-positive-badge">
-                <svg class="change-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                            <polyline points="18 15 12 9 6 15"/>
-                                    </svg>
-                +0.00%
+                <svg class="change-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+                Portfolio Value
             </span>
+            @endif
         </div>
     </div>
 
@@ -1968,6 +1968,32 @@ window.smartsupp||(function(d) {
             this.style.transform = 'scale(1)';
         });
     });
+    </script>
+
+    <script>
+        (function () {
+            const balances = @json($cryptoBalances);
+            const prices   = @json($cryptoPrices);
+
+            function fmt(n) {
+                if (n >= 1) return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                return '$' + n.toFixed(8);
+            }
+
+            document.querySelectorAll('.enhanced-token-row').forEach(function (row) {
+                const symEl = row.querySelector('.token-symbol');
+                const usdEl = row.querySelector('.token-usd-value');
+                if (!symEl || !usdEl) return;
+
+                const sym = symEl.textContent.trim();
+                const bal = parseFloat(balances[sym] || 0);
+                const price = parseFloat(prices[sym] || 0);
+                const usd = bal * price;
+
+                usdEl.textContent = fmt(usd);
+                if (usd > 0) usdEl.style.color = '#fbbf24';
+            });
+        })();
     </script>
 </body>
 </html>

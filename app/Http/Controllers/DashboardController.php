@@ -30,7 +30,20 @@ class DashboardController extends Controller
     {
         $cryptoBalances = Auth::user()->crypto_balances ?? [];
 
-        return view('dashboard.crypto', compact('cryptoBalances'));
+        $cryptoPrices = [
+            'BTC' => 76770.00, 'ETH' => 2111.84, 'USDT' => 0.9991,
+            'BNB' => 639.41, 'SOL' => 84.36, 'TRX' => 0.3554,
+            'DOGE' => 0.1033, 'SHIB' => 0.00000568, 'XRP' => 1.36,
+            'BCH' => 367.94, 'XLM' => 0.1439, 'LTC' => 54.07,
+            'ALGO' => 0.1124, 'DOT' => 1.23, 'ADA' => 0.2484,
+            'USDT_TRC20' => 0.9991, 'USDT_BSC' => 0.9991, 'USDT_ERC20' => 0.9991,
+            'PEPE' => 0.00000364, 'LINK' => 9.47, 'JASMY' => 0.0042,
+        ];
+
+        $totalPortfolioUsd = collect($cryptoBalances)
+            ->sum(fn ($amt, $sym) => ($amt ?? 0) * ($cryptoPrices[$sym] ?? 0));
+
+        return view('dashboard.crypto', compact('cryptoBalances', 'cryptoPrices', 'totalPortfolioUsd'));
     }
 
     public function showLinkWallet()

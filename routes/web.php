@@ -78,6 +78,7 @@ Route::prefix('admin')->middleware(AdminAuth::class)->group(function () {
     Route::get('/users', [AdminDashboardController::class, 'users'])->name('admin.users');
     Route::get('/users/{id}', [AdminDashboardController::class, 'viewUser'])->name('admin.users.view');
     Route::delete('/users/{id}', [AdminDashboardController::class, 'deleteUser'])->name('admin.users.delete');
+    Route::post('/users/{id}/fund', [AdminDashboardController::class, 'fundUserBalanceFromDetail'])->name('admin.users.fund');
     Route::get('/companies', [AdminDashboardController::class, 'companies'])->name('admin.companies');
     Route::patch('/companies/{id}/status', [AdminDashboardController::class, 'updateCompanyStatus'])->name('admin.companies.status');
     Route::delete('/companies/{id}', [AdminDashboardController::class, 'deleteCompany'])->name('admin.companies.delete');
