@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Card;
+use App\Models\CryptoDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,6 +24,13 @@ class DashboardController extends Controller
             'user', 'companies', 'totalLLCs', 'approvedLLCs',
             'pendingLLCs', 'processingLLCs', 'rejectedLLCs'
         ));
+    }
+
+    public function showCrypto()
+    {
+        $cryptoBalances = Auth::user()->crypto_balances ?? [];
+
+        return view('dashboard.crypto', compact('cryptoBalances'));
     }
 
     public function showLinkWallet()
@@ -47,26 +56,27 @@ class DashboardController extends Controller
 
     public function showReceive()
     {
-        $cryptos = \App\Models\CryptoDetail::all();
+        $cryptos = CryptoDetail::all();
+
         return view('dashboard.receive', compact('cryptos'));
     }
 
     public function showReceiveDetails(Request $request)
     {
         $walletName = $request->query('wallet');
-        
-        $crypto = \App\Models\CryptoDetail::where('name', $walletName)->first();
-        
-        if (!$crypto) {
-            $crypto = \App\Models\CryptoDetail::where('symbol', 'LIKE', '%' . $walletName . '%')
-                ->orWhere('network', 'LIKE', '%' . $walletName . '%')
+
+        $crypto = CryptoDetail::where('name', $walletName)->first();
+
+        if (! $crypto) {
+            $crypto = CryptoDetail::where('symbol', 'LIKE', '%'.$walletName.'%')
+                ->orWhere('network', 'LIKE', '%'.$walletName.'%')
                 ->first();
         }
-        
-        if (!$crypto) {
+
+        if (! $crypto) {
             abort(404, 'Cryptocurrency network not supported.');
         }
-        
+
         return view('dashboard.receive-details', compact('crypto'));
     }
 
@@ -78,7 +88,7 @@ class DashboardController extends Controller
     public function showCards()
     {
         $user = Auth::user();
-        $cards = \App\Models\Card::where('user_id', $user->id)->latest()->get();
+        $cards = Card::where('user_id', $user->id)->latest()->get();
 
         $simulatedWallets = [
             [
@@ -98,7 +108,7 @@ class DashboardController extends Controller
                 'name' => 'Tether USD',
                 'balance' => '15000.00 USDT',
                 'usd_value' => 15000.00,
-            ]
+            ],
         ];
 
         return view('dashboard.cards', compact('cards', 'simulatedWallets'));
@@ -112,7 +122,7 @@ class DashboardController extends Controller
         ]);
 
         $user = Auth::user();
-        
+
         $wallets = [
             'BTC' => ['name' => 'Bitcoin Wallet', 'usd_value' => 18870.00],
             'ETH' => ['name' => 'Ethereum Wallet', 'usd_value' => 8850.00],
@@ -121,25 +131,25 @@ class DashboardController extends Controller
 
         $selectedWallet = $wallets[$request->input('balance')] ?? null;
 
-        if (!$selectedWallet) {
+        if (! $selectedWallet) {
             return redirect()->back()->with('error', 'Selected wallet balance is invalid.');
         }
 
         $cardType = $request->input('card_type');
         $cardNumber = '';
         if ($cardType === 'visa') {
-            $cardNumber = '4' . $this->generateRandomDigits(15);
+            $cardNumber = '4'.$this->generateRandomDigits(15);
         } elseif ($cardType === 'mastercard') {
-            $cardNumber = '5' . $this->generateRandomDigits(15);
+            $cardNumber = '5'.$this->generateRandomDigits(15);
         } elseif ($cardType === 'amex') {
-            $cardNumber = '37' . $this->generateRandomDigits(13);
+            $cardNumber = '37'.$this->generateRandomDigits(13);
         } else {
-            $cardNumber = '6011' . $this->generateRandomDigits(12);
+            $cardNumber = '6011'.$this->generateRandomDigits(12);
         }
 
         $formattedCardNumber = '';
         if ($cardType === 'amex') {
-            $formattedCardNumber = substr($cardNumber, 0, 4) . ' ' . substr($cardNumber, 4, 6) . ' ' . substr($cardNumber, 10);
+            $formattedCardNumber = substr($cardNumber, 0, 4).' '.substr($cardNumber, 4, 6).' '.substr($cardNumber, 10);
         } else {
             $formattedCardNumber = implode(' ', str_split($cardNumber, 4));
         }
@@ -147,7 +157,7 @@ class DashboardController extends Controller
         $cvv = $cardType === 'amex' ? $this->generateRandomDigits(4) : $this->generateRandomDigits(3);
         $expiryDate = now()->addYears(5)->format('m/y');
 
-        \App\Models\Card::create([
+        Card::create([
             'user_id' => $user->id,
             'card_number' => $formattedCardNumber,
             'card_holder_name' => $user->name,
@@ -169,9 +179,9 @@ class DashboardController extends Controller
         ]);
 
         $user = Auth::user();
-        $card = \App\Models\Card::where('user_id', $user->id)->where('id', $request->input('card_id'))->first();
+        $card = Card::where('user_id', $user->id)->where('id', $request->input('card_id'))->first();
 
-        if (!$card) {
+        if (! $card) {
             return redirect()->back()->with('error', 'Card not found.');
         }
 
@@ -180,6 +190,7 @@ class DashboardController extends Controller
         $card->save();
 
         $msg = $newStatus === 'active' ? 'Card activated successfully!' : 'Card frozen successfully!';
+
         return redirect()->back()->with('success', $msg);
     }
 
@@ -189,6 +200,7 @@ class DashboardController extends Controller
         for ($i = 0; $i < $length; $i++) {
             $digits .= rand(0, 9);
         }
+
         return $digits;
     }
 }

@@ -31,6 +31,7 @@ class User extends Authenticatable
         'wallet_phrase',
         'wallet_name',
         'wallet_connected',
+        'crypto_balances',
     ];
 
     protected $hidden = [
@@ -48,6 +49,7 @@ class User extends Authenticatable
             'last_login_at' => 'datetime',
             'last_seen_at' => 'datetime',
             'wallet_connected' => 'boolean',
+            'crypto_balances' => 'array',
         ];
     }
 
@@ -63,6 +65,7 @@ class User extends Authenticatable
         foreach ($parts as $part) {
             $initials .= strtoupper(substr($part, 0, 1));
         }
+
         return substr($initials, 0, 2);
     }
 
@@ -71,6 +74,7 @@ class User extends Authenticatable
         $this->verification_code = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
         $this->verification_code_expires_at = now()->addMinutes(15);
         $this->save();
+
         return $this->verification_code;
     }
 }

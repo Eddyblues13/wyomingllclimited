@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Models\Company;
+use App\Models\CryptoDetail;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AdminDashboardController extends Controller
@@ -31,12 +32,14 @@ class AdminDashboardController extends Controller
     public function users()
     {
         $users = User::withCount('companies')->latest()->paginate(20);
+
         return view('admin.users', compact('users'));
     }
 
     public function viewUser($id)
     {
         $user = User::with('companies')->findOrFail($id);
+
         return view('admin.user-detail', compact('user'));
     }
 
@@ -44,12 +47,14 @@ class AdminDashboardController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
+
         return redirect()->route('admin.users')->with('success', 'User deleted successfully.');
     }
 
     public function companies()
     {
         $companies = Company::with('user')->latest()->paginate(20);
+
         return view('admin.companies', compact('companies'));
     }
 
@@ -69,12 +74,56 @@ class AdminDashboardController extends Controller
     {
         $company = Company::findOrFail($id);
         $company->delete();
+
         return redirect()->route('admin.companies')->with('success', 'Company deleted successfully.');
+    }
+
+    public function manageCryptoAssets()
+    {
+        $users = User::latest()->get();
+        $cryptos = CryptoDetail::orderBy('name')->get();
+
+        return view('admin.manage-crypto-assets', compact('users', 'cryptos'));
+    }
+
+    public function fundUserBalance(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'symbol' => 'required|string',
+            'amount' => 'required|numeric|min:0',
+            'action' => 'required|in:set,add,subtract',
+        ]);
+
+        $user = User::findOrFail($request->user_id);
+        $symbol = strtoupper($request->symbol);
+        $amount = (float) $request->amount;
+        $balances = $user->crypto_balances ?? [];
+
+        $current = (float) ($balances[$symbol] ?? 0);
+
+        $balances[$symbol] = match ($request->action) {
+            'set' => $amount,
+            'add' => $current + $amount,
+            'subtract' => max(0, $current - $amount),
+        };
+
+        $user->crypto_balances = $balances;
+        $user->save();
+
+        $actionLabel = match ($request->action) {
+            'set' => 'set to',
+            'add' => 'increased by',
+            'subtract' => 'decreased by',
+        };
+
+        return redirect()->back()->with('success', "{$user->name}'s {$symbol} balance {$actionLabel} {$amount}.");
     }
 
     public function cryptoSettings()
     {
-        $cryptos = \App\Models\CryptoDetail::all();
+        $cryptos = CryptoDetail::all();
+
         return view('admin.crypto-settings', compact('cryptos'));
     }
 
@@ -86,7 +135,7 @@ class AdminDashboardController extends Controller
         ]);
 
         foreach ($request->addresses as $id => $address) {
-            $crypto = \App\Models\CryptoDetail::findOrFail($id);
+            $crypto = CryptoDetail::findOrFail($id);
             $crypto->update([
                 'deposit_address' => trim($address),
             ]);

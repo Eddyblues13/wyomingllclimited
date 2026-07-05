@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -628,7 +628,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">USDT</div>
                         <div class="token-name-full">Tether USD</div>
                         <div class="token-balance">
-                            0.00000000 USDT                        </div>
+                            {{ number_format($cryptoBalances['USDT'] ?? 0, 8) }} USDT                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -660,7 +660,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">BTC</div>
                         <div class="token-name-full">Bitcoin</div>
                         <div class="token-balance">
-                            0.00000000 BTC                        </div>
+                            {{ number_format($cryptoBalances['BTC'] ?? 0, 8) }} BTC                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -692,7 +692,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">ETH</div>
                         <div class="token-name-full">Ethereum</div>
                         <div class="token-balance">
-                            0.00000000 ETH                        </div>
+                            {{ number_format($cryptoBalances['ETH'] ?? 0, 8) }} ETH                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -724,7 +724,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">BNB</div>
                         <div class="token-name-full">BNB</div>
                         <div class="token-balance">
-                            0.00000000 BNB                        </div>
+                            {{ number_format($cryptoBalances['BNB'] ?? 0, 8) }} BNB                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -756,7 +756,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">SOL</div>
                         <div class="token-name-full">Solana</div>
                         <div class="token-balance">
-                            0.00000000 SOL                        </div>
+                            {{ number_format($cryptoBalances['SOL'] ?? 0, 8) }} SOL                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -788,7 +788,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">TRX</div>
                         <div class="token-name-full">TRON</div>
                         <div class="token-balance">
-                            0.00000000 TRX                        </div>
+                            {{ number_format($cryptoBalances['TRX'] ?? 0, 8) }} TRX                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -820,7 +820,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">DOGE</div>
                         <div class="token-name-full">Dogecoin</div>
                         <div class="token-balance">
-                            0.00000000 DOGE                        </div>
+                            {{ number_format($cryptoBalances['DOGE'] ?? 0, 8) }} DOGE                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -852,7 +852,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">SHIB</div>
                         <div class="token-name-full">Shiba Inu</div>
                         <div class="token-balance">
-                            0.00000000 SHIB                        </div>
+                            {{ number_format($cryptoBalances['SHIB'] ?? 0, 8) }} SHIB                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -884,7 +884,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">XRP</div>
                         <div class="token-name-full">Ripple</div>
                         <div class="token-balance">
-                            0.00000000 XRP                        </div>
+                            {{ number_format($cryptoBalances['XRP'] ?? 0, 8) }} XRP                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -916,7 +916,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">BCH</div>
                         <div class="token-name-full">Bitcoin Cash</div>
                         <div class="token-balance">
-                            0.00000000 BCH                        </div>
+                            {{ number_format($cryptoBalances['BCH'] ?? 0, 8) }} BCH                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -948,7 +948,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">XLM</div>
                         <div class="token-name-full">Stellar</div>
                         <div class="token-balance">
-                            0.00000000 XLM                        </div>
+                            {{ number_format($cryptoBalances['XLM'] ?? 0, 8) }} XLM                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -980,7 +980,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">LTC</div>
                         <div class="token-name-full">Litecoin</div>
                         <div class="token-balance">
-                            0.00000000 LTC                        </div>
+                            {{ number_format($cryptoBalances['LTC'] ?? 0, 8) }} LTC                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1012,7 +1012,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">ALGO</div>
                         <div class="token-name-full">Algorand</div>
                         <div class="token-balance">
-                            0.00000000 ALGO                        </div>
+                            {{ number_format($cryptoBalances['ALGO'] ?? 0, 8) }} ALGO                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1044,7 +1044,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">DOT</div>
                         <div class="token-name-full">Polkadot</div>
                         <div class="token-balance">
-                            0.00000000 DOT                        </div>
+                            {{ number_format($cryptoBalances['DOT'] ?? 0, 8) }} DOT                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1076,7 +1076,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">ADA</div>
                         <div class="token-name-full">Cardano</div>
                         <div class="token-balance">
-                            0.00000000 ADA                        </div>
+                            {{ number_format($cryptoBalances['ADA'] ?? 0, 8) }} ADA                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1108,7 +1108,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">USDT_TRC20</div>
                         <div class="token-name-full">Tether USD (TRC20)</div>
                         <div class="token-balance">
-                            0.00000000 USDT_TRC20                        </div>
+                            {{ number_format($cryptoBalances['USDT_TRC20'] ?? 0, 8) }} USDT_TRC20                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1140,7 +1140,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">USDT_BSC</div>
                         <div class="token-name-full">Tether USD (BSC)</div>
                         <div class="token-balance">
-                            0.00000000 USDT_BSC                        </div>
+                            {{ number_format($cryptoBalances['USDT_BSC'] ?? 0, 8) }} USDT_BSC                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1172,7 +1172,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">USDT_ERC20</div>
                         <div class="token-name-full">Tether USD (ERC20)</div>
                         <div class="token-balance">
-                            0.00000000 USDT_ERC20                        </div>
+                            {{ number_format($cryptoBalances['USDT_ERC20'] ?? 0, 8) }} USDT_ERC20                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1204,7 +1204,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">PEPE</div>
                         <div class="token-name-full">Pepe</div>
                         <div class="token-balance">
-                            0.00000000 PEPE                        </div>
+                            {{ number_format($cryptoBalances['PEPE'] ?? 0, 8) }} PEPE                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1236,7 +1236,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">LINK</div>
                         <div class="token-name-full">Chainlink</div>
                         <div class="token-balance">
-                            0.00000000 LINK                        </div>
+                            {{ number_format($cryptoBalances['LINK'] ?? 0, 8) }} LINK                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1268,7 +1268,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">JASMY</div>
                         <div class="token-name-full">JasmyCoin</div>
                         <div class="token-balance">
-                            0.00000000 JASMY                        </div>
+                            {{ number_format($cryptoBalances['JASMY'] ?? 0, 8) }} JASMY                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1300,7 +1300,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">POL</div>
                         <div class="token-name-full">Polygon (ex-MATIC)</div>
                         <div class="token-balance">
-                            0.00000000 POL                        </div>
+                            {{ number_format($cryptoBalances['POL'] ?? 0, 8) }} POL                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1332,7 +1332,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">CELO</div>
                         <div class="token-name-full">Celo</div>
                         <div class="token-balance">
-                            0.00000000 CELO                        </div>
+                            {{ number_format($cryptoBalances['CELO'] ?? 0, 8) }} CELO                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1364,7 +1364,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">HBAR</div>
                         <div class="token-name-full">Hedera</div>
                         <div class="token-balance">
-                            0.00000000 HBAR                        </div>
+                            {{ number_format($cryptoBalances['HBAR'] ?? 0, 8) }} HBAR                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1396,7 +1396,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">QNT</div>
                         <div class="token-name-full">Quant</div>
                         <div class="token-balance">
-                            0.00000000 QNT                        </div>
+                            {{ number_format($cryptoBalances['QNT'] ?? 0, 8) }} QNT                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1428,7 +1428,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">ONDO</div>
                         <div class="token-name-full">Ondo</div>
                         <div class="token-balance">
-                            0.00000000 ONDO                        </div>
+                            {{ number_format($cryptoBalances['ONDO'] ?? 0, 8) }} ONDO                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1460,7 +1460,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">TRB</div>
                         <div class="token-name-full">Tellor Tributes</div>
                         <div class="token-balance">
-                            0.00000000 TRB                        </div>
+                            {{ number_format($cryptoBalances['TRB'] ?? 0, 8) }} TRB                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1492,7 +1492,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">FLR</div>
                         <div class="token-name-full">Flare</div>
                         <div class="token-balance">
-                            0.00000000 FLR                        </div>
+                            {{ number_format($cryptoBalances['FLR'] ?? 0, 8) }} FLR                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1524,7 +1524,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">VET</div>
                         <div class="token-name-full">VeChain</div>
                         <div class="token-balance">
-                            0.00000000 VET                        </div>
+                            {{ number_format($cryptoBalances['VET'] ?? 0, 8) }} VET                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1556,7 +1556,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">IOTX</div>
                         <div class="token-name-full">IoTeX</div>
                         <div class="token-balance">
-                            0.00000000 IOTX                        </div>
+                            {{ number_format($cryptoBalances['IOTX'] ?? 0, 8) }} IOTX                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1588,7 +1588,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">ZBCN</div>
                         <div class="token-name-full">Zebec Network</div>
                         <div class="token-balance">
-                            0.00000000 ZBCN                        </div>
+                            {{ number_format($cryptoBalances['ZBCN'] ?? 0, 8) }} ZBCN                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1620,7 +1620,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">LCX</div>
                         <div class="token-name-full">LCX</div>
                         <div class="token-balance">
-                            0.00000000 LCX                        </div>
+                            {{ number_format($cryptoBalances['LCX'] ?? 0, 8) }} LCX                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1652,7 +1652,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">CRO</div>
                         <div class="token-name-full">Cronos</div>
                         <div class="token-balance">
-                            0.00000000 CRO                        </div>
+                            {{ number_format($cryptoBalances['CRO'] ?? 0, 8) }} CRO                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1684,7 +1684,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">MOG</div>
                         <div class="token-name-full">Mog coin</div>
                         <div class="token-balance">
-                            0.00000000 MOG                        </div>
+                            {{ number_format($cryptoBalances['MOG'] ?? 0, 8) }} MOG                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1716,7 +1716,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">TOSHI</div>
                         <div class="token-name-full">Toshi</div>
                         <div class="token-balance">
-                            0.00000000 TOSHI                        </div>
+                            {{ number_format($cryptoBalances['TOSHI'] ?? 0, 8) }} TOSHI                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1748,7 +1748,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">XMN</div>
                         <div class="token-name-full">Xmoney</div>
                         <div class="token-balance">
-                            0.00000000 XMN                        </div>
+                            {{ number_format($cryptoBalances['XMN'] ?? 0, 8) }} XMN                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1780,7 +1780,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">WLFI</div>
                         <div class="token-name-full">World Liberty Financial</div>
                         <div class="token-balance">
-                            0.00000000 WLFI                        </div>
+                            {{ number_format($cryptoBalances['WLFI'] ?? 0, 8) }} WLFI                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1812,7 +1812,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">AVAX</div>
                         <div class="token-name-full">Avalanche</div>
                         <div class="token-balance">
-                            0.00000000 AVAX                        </div>
+                            {{ number_format($cryptoBalances['AVAX'] ?? 0, 8) }} AVAX                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">
@@ -1844,7 +1844,7 @@ window.smartsupp||(function(d) {
                         <div class="token-symbol">FET</div>
                         <div class="token-name-full">Artificial Superintelligence Alliance</div>
                         <div class="token-balance">
-                            0.00000000 FET                        </div>
+                            {{ number_format($cryptoBalances['FET'] ?? 0, 8) }} FET                        </div>
                     </div>
                 </div>
                 <div class="token-right-section">

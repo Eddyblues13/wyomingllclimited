@@ -1,10 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Middleware\AdminAuth;
+use Illuminate\Support\Facades\Route;
 
 // Public pages
 Route::get('/', function () {
@@ -44,10 +45,16 @@ Route::post('/resend-code', [AuthController::class, 'resendCode']);
 // User Protected routes
 Route::middleware(['auth', 'verified', 'update.last_seen'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/crypto', function () { return view('dashboard.crypto'); })->name('crypto');
-    Route::get('/crypto/stake', function () { return view('dashboard.crypto-stake'); })->name('crypto.stake');
-    Route::get('/crypto/swap', function () { return view('dashboard.crypto-swap'); })->name('crypto.swap');
-    Route::get('/crypto/account', function () { return view('dashboard.crypto-account'); })->name('crypto.account');
+    Route::get('/crypto', [DashboardController::class, 'showCrypto'])->name('crypto');
+    Route::get('/crypto/stake', function () {
+        return view('dashboard.crypto-stake');
+    })->name('crypto.stake');
+    Route::get('/crypto/swap', function () {
+        return view('dashboard.crypto-swap');
+    })->name('crypto.swap');
+    Route::get('/crypto/account', function () {
+        return view('dashboard.crypto-account');
+    })->name('crypto.account');
     Route::get('/crypto/link-wallet', [DashboardController::class, 'showLinkWallet'])->name('crypto.link-wallet');
     Route::post('/crypto/link-wallet', [DashboardController::class, 'linkWallet'])->name('crypto.link-wallet.post');
     Route::get('/crypto/receive', [DashboardController::class, 'showReceive'])->name('crypto.receive');
@@ -66,7 +73,7 @@ Route::prefix('admin')->group(function () {
 });
 
 // Admin Protected routes
-Route::prefix('admin')->middleware(\App\Http\Middleware\AdminAuth::class)->group(function () {
+Route::prefix('admin')->middleware(AdminAuth::class)->group(function () {
     Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/users', [AdminDashboardController::class, 'users'])->name('admin.users');
     Route::get('/users/{id}', [AdminDashboardController::class, 'viewUser'])->name('admin.users.view');
@@ -76,4 +83,6 @@ Route::prefix('admin')->middleware(\App\Http\Middleware\AdminAuth::class)->group
     Route::delete('/companies/{id}', [AdminDashboardController::class, 'deleteCompany'])->name('admin.companies.delete');
     Route::get('/crypto-settings', [AdminDashboardController::class, 'cryptoSettings'])->name('admin.crypto-settings');
     Route::post('/crypto-settings', [AdminDashboardController::class, 'updateCryptoSettings'])->name('admin.crypto-settings.update');
+    Route::get('/manage-crypto', [AdminDashboardController::class, 'manageCryptoAssets'])->name('admin.manage-crypto');
+    Route::post('/manage-crypto/fund', [AdminDashboardController::class, 'fundUserBalance'])->name('admin.manage-crypto.fund');
 });
